@@ -19,19 +19,21 @@ $amount = $room['price']; // Example: price per night, you can calculate based o
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-5">
         <h2>Payment for <?= $room['room_name'] ?></h2>
         <p>Check-in: <?= $check_in ?></p>
         <p>Check-out: <?= $check_out ?></p>
         <p>Total Amount: $<?= number_format($amount, 2) ?></p>
-        
+
         <form method="POST" action="confirmation.php">
             <div class="mb-3">
                 <label for="payment_method" class="form-label">Payment Method</label>
@@ -45,5 +47,6 @@ $amount = $room['price']; // Example: price per night, you can calculate based o
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
 <?php $conn->close(); ?>

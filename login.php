@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// ตรวจสอบข้อมูลผู้ใช้จากฐานข้อมูล
+// เชื่อมต่อกับฐานข้อมูล
 $conn = new mysqli("localhost", "root", "", "hotel");
 
 if ($conn->connect_error) {
@@ -13,32 +13,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // ตรวจสอบข้อมูลผู้ใช้จากฐานข้อมูล
-    $sql = "SELECT * FROM users WHERE username = '$username'";  // ใช้ username ในการค้นหา
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // ตรวจสอบรหัสผ่านที่เข้ารหัส
+        // ตรวจสอบรหัสผ่านที่ถูกแฮช
         if (password_verify($password, $user['password'])) {
-            // ตรวจสอบ role
+            // รหัสผ่านถูกต้อง
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];  // เก็บ role ไว้ใน session (admin หรือ user)
+            $_SESSION['role'] = $user['role']; // เก็บ role ไว้ใน session
 
             // ตรวจสอบ role และไปที่หน้า dashboard ที่เหมาะสม
             if ($_SESSION['role'] == 'admin') {
-                header("Location: admin_dashboard.php"); // ถ้าเป็น admin ไปหน้า admin dashboard
+                header("Location: admin_dashboard.php");
             } else {
-                header("Location: user_dashboard.php");  // ถ้าเป็น user ไปหน้า user dashboard
+                header("Location: index.php");
             }
             exit();
         } else {
-            $error_message = "Invalid login credentials!"; // รหัสผ่านไม่ถูกต้อง
+            $error_message = "Invalid login credentials!";
         }
     } else {
-        $error_message = "Invalid login credentials!"; // ผู้ใช้ไม่พบ
+        $error_message = "Invalid login credentials!";
     }
+
+    $stmt->close();
 }
 
 $conn->close();
@@ -46,6 +51,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,22 +106,22 @@ $conn->close();
         .registerbtn button {
             padding: 10px 20px;
             font-size: 1rem;
-
             color: #fff;
+            background-color: #6c757d;
             border: none;
             border-radius: 5px;
-            width: 100%;
             cursor: pointer;
         }
 
         .registerbtn button:hover {
-            background-color:rgb(73, 175, 182);
+            background-color: #5a6268;
         }
     </style>
 </head>
+
 <body>
     <div class="card">
-        <div class="card-header" >
+        <div class="card-header">
             <h4>Login</h4>
         </div>
         <form method="POST">
@@ -132,15 +138,15 @@ $conn->close();
                 echo '<div class="alert alert-danger">' . $error_message . '</div>';
             }
             ?>
-            
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-        <div class="registerbtn" >
+        <div class="registerbtn">
             <a href="./register.php">
-                <button type="submit" class="btn btn-secondary">Register</button>
+                <button type="button">Register</button>
             </a>
+        </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

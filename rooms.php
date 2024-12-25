@@ -20,6 +20,7 @@ if (isset($_GET['logout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,8 @@ if (isset($_GET['logout'])) {
         /* Ensuring all room images have the same size */
         .card-img-top {
             height: 200px;
-            object-fit: cover; /* Keeps aspect ratio intact, crops excess */
+            object-fit: cover;
+            /* Keeps aspect ratio intact, crops excess */
         }
 
         /* Styling the footer */
@@ -73,6 +75,7 @@ if (isset($_GET['logout'])) {
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -89,7 +92,7 @@ if (isset($_GET['logout'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="rooms.php">Booking</a>
                     </li>
-              
+
                     <!-- Check if user is admin to show Manage Rooms button -->
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') { ?>
                         <li class="nav-item">
@@ -132,6 +135,7 @@ if (isset($_GET['logout'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
 
 <?php $conn->close(); ?>

@@ -9,18 +9,22 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Get room details
 $sql = "SELECT * FROM rooms WHERE room_id=$room_id";
 $result = $conn->query($sql);
 $room = $result->fetch_assoc();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-5">
         <h2>Reservation for <?= $room['room_name'] ?></h2>
@@ -39,5 +43,7 @@ $room = $result->fetch_assoc();
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
+
 <?php $conn->close(); ?>
